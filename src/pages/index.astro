@@ -1,0 +1,679 @@
+---
+/**
+ * Signing in to R.E. Cost Seg — help page
+ *
+ * Main page for support.recostseg.com
+ * Requires (copy to your project's public/ folder):
+ *   public/recostseg-logo.svg
+ *   public/fonts/InterVariable.woff2
+ *   public/fonts/InterVariable-Italic.woff2
+ *
+ * Migration phase:
+ *   'A' — before Aug 31, 2026 (migration notice, disabled CTA, future-tense FAQ)
+ *   'B' — Aug 31, 2026 onward (no notice, live CTA, past-tense FAQ)
+ */
+
+const configuredPhase = import.meta.env.PUBLIC_MIGRATION_PHASE;
+const migrationDate = Date.parse("2026-08-31T00:00:00-05:00");
+const phase =
+  configuredPhase === "A" || configuredPhase === "B"
+    ? configuredPhase
+    : Date.now() >= migrationDate
+      ? "B"
+      : "A";
+
+const isPhaseA = phase === "A";
+const isPhaseB = !isPhaseA;
+
+const title = "Signing in to R.E. Cost Seg";
+const description =
+  "How to sign in to the R.E. Cost Seg client portal at app.recostseg.com using a one-time email code.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://support.recostseg.com/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://support.recostseg.com/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link
+      rel="preload"
+      href="/fonts/InterVariable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!--
+      GLOBAL — design tokens + resets. If your project already loads
+      colors_and_type.css globally, delete this whole is:global block.
+    -->
+    <style is:global>
+      /* ─── Inter (variable font, self-hosted) ──────────────────────── */
+      @font-face {
+        font-family: "Inter";
+        src: url("/fonts/InterVariable.woff2") format("woff2-variations"),
+          url("/fonts/InterVariable.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("/fonts/InterVariable-Italic.woff2") format("woff2-variations"),
+          url("/fonts/InterVariable-Italic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      :root {
+        /* ─── BRAND — blues ─────────────────────────────────────────── */
+        --midnight: #06263d;
+        --sky-blue: #75b2de;
+        --ice-blue: #d2e7f5;
+        --cloud-blue: #f3f9fc;
+        --accent-default: #3378ff;
+        --accent-hover: #2a68d8;
+        --accent-deep: #172b85;
+
+        /* ─── NEUTRALS ─────────────────────────────────────────────── */
+        --white: #ffffff;
+        --black: #000000;
+        --gray-50: #fafafa;
+        --gray-100: #f5f5f5;
+        --gray-200: #e9eaeb;
+        --gray-300: #d5d7da;
+        --gray-400: #c7cdd2;
+        --gray-500: #7487a2;
+        --gray-600: #64748b;
+        --gray-700: #535862;
+        --gray-800: #414651;
+        --gray-900: #252b37;
+        --gray-950: #111111;
+
+        /* ─── SEMANTIC — foreground / text ─────────────────────────── */
+        --fg-primary: var(--midnight);
+        --fg-secondary: var(--gray-500);
+        --fg-tertiary: var(--gray-600);
+        --fg-brand: var(--accent-default);
+        --fg-on-dark: var(--white);
+
+        /* ─── SEMANTIC — background ───────────────────────────────── */
+        --bg-primary: var(--white);
+        --bg-secondary: var(--cloud-blue);
+        --bg-tertiary: var(--ice-blue);
+        --bg-dark: var(--midnight);
+
+        /* ─── SEMANTIC — border / keyline ─────────────────────────── */
+        --border-default: var(--gray-300);
+        --border-focus: var(--accent-default);
+        --border-button-primary: var(--accent-hover);
+
+        /* ─── TYPOGRAPHY ──────────────────────────────────────────── */
+        --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, sans-serif;
+        --font-display: var(--font-sans);
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+        --weight-bold: 700;
+      }
+
+      html {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: 100%;
+        font-optical-sizing: auto;
+        font-feature-settings: "cv11", "ss01", "ss03";
+      }
+
+      body {
+        margin: 0;
+        background: var(--white);
+        color: var(--fg-primary);
+      }
+
+      a {
+        color: var(--accent-default);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        text-decoration-thickness: 1px;
+      }
+      a:hover {
+        color: var(--accent-hover);
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: none;
+        border-color: var(--accent-default);
+        box-shadow: 0 0 0 4px rgba(51, 120, 255, 0.24);
+        border-radius: 4px;
+      }
+    </style>
+
+    <!-- PAGE — scoped styles -->
+    <style>
+      .page {
+        font-family: var(--font-sans);
+        color: var(--midnight);
+        background: var(--white);
+        min-height: 100vh;
+        padding-bottom: 96px;
+      }
+
+      /* ─── Status band (Phase A) ─── */
+      .band {
+        background: var(--ice-blue);
+        border-bottom: 1px solid rgba(6, 38, 61, 0.08);
+      }
+      .band__inner {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 16px 24px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .band__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: var(--midnight);
+        flex: 0 0 auto;
+        margin-top: 9px;
+      }
+      .band__text {
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--midnight);
+        margin: 0;
+      }
+      .band__lead {
+        font-weight: 500;
+      }
+
+      /* ─── Layout ─── */
+      .header {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 28px 24px 0;
+      }
+      .header__logo {
+        height: 24px;
+        width: auto;
+        display: block;
+      }
+      .main {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* ─── Type ─── */
+      .title {
+        font-size: 34px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        font-weight: 500;
+        color: var(--midnight);
+        margin: 40px 0 0;
+      }
+      .lede {
+        font-size: 18px;
+        line-height: 1.65;
+        color: var(--gray-700);
+        margin: 20px 0 0;
+        text-wrap: pretty;
+      }
+      .body {
+        font-size: 17px;
+        line-height: 1.65;
+        color: var(--gray-700);
+        margin: 0;
+      }
+      .body--top-16 {
+        margin-top: 16px;
+      }
+      .note {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--gray-600);
+        margin: 0;
+      }
+      .note--top-24 {
+        margin-top: 24px;
+      }
+      .note--top-20 {
+        margin-top: 20px;
+      }
+      .pretty {
+        text-wrap: pretty;
+      }
+      .nowrap-medium {
+        white-space: nowrap;
+        font-weight: 500;
+      }
+
+      .section {
+        margin-top: 56px;
+      }
+      .section__title {
+        font-size: 22px;
+        line-height: 1.35;
+        font-weight: 500;
+        color: var(--midnight);
+        margin: 0;
+      }
+      .panel {
+        background: var(--cloud-blue);
+        border: 1px solid var(--ice-blue);
+        border-radius: 12px;
+        padding: 28px 24px;
+      }
+
+      /* ─── Numbered steps ─── */
+      .steps {
+        list-style: none;
+        margin: 28px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .steps__item {
+        display: flex;
+        gap: 16px;
+        align-items: baseline;
+      }
+      .steps__num {
+        flex: 0 0 auto;
+        width: 28px;
+        height: 28px;
+        border-radius: 9999px;
+        border: 1px solid var(--border-default);
+        color: var(--gray-700);
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .steps__text {
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      /* ─── Bulleted list ─── */
+      .bullets {
+        list-style: none;
+        margin: 20px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .bullets__item {
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+      .bullets__dot {
+        flex: 0 0 auto;
+        width: 5px;
+        height: 5px;
+        border-radius: 9999px;
+        background: var(--gray-500);
+        margin-top: 11px;
+      }
+
+      /* ─── CTA ─── */
+      .cta {
+        margin-top: 28px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1;
+        padding: 16px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+      .btn--disabled {
+        background: var(--gray-400);
+        color: var(--gray-800);
+        border: 1px solid var(--gray-400);
+        cursor: default;
+      }
+      .btn--primary {
+        background: var(--accent-default);
+        color: var(--white);
+        border: 1px solid var(--accent-hover);
+        transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .btn--primary:hover {
+        background: var(--accent-hover);
+        color: var(--white);
+      }
+
+      /* ─── Contact card ─── */
+      .contact {
+        margin-top: 24px;
+        border: 1px solid var(--border-default);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .contact__row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .contact__label {
+        font-size: 14px;
+        line-height: 1.4;
+        font-weight: 500;
+        color: var(--gray-600);
+      }
+      .contact__value {
+        font-size: 21px;
+        line-height: 1.35;
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .contact__value--break {
+        word-break: break-word;
+      }
+
+      /* ─── FAQ ─── */
+      .faq {
+        margin-top: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .faq .faq {
+        margin-top: 0;
+      }
+      .faq__item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .faq__q {
+        font-size: 17px;
+        line-height: 1.5;
+        font-weight: 500;
+        color: var(--midnight);
+        margin: 0;
+      }
+      .faq__a {
+        font-size: 17px;
+        line-height: 1.6;
+        color: var(--gray-700);
+        margin: 0;
+      }
+
+      /* ─── Footer ─── */
+      .footer {
+        margin-top: 56px;
+        border-top: 1px solid var(--border-default);
+        padding-top: 24px;
+      }
+
+      /* ─── Small screens ─── */
+      @media (max-width: 480px) {
+        .title {
+          font-size: 30px;
+        }
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="page">
+      {/* ════ SWAPPABLE 1 of 3 — STATUS BAND. Phase A only. ════ */}
+      {
+        isPhaseA && (
+          <div class="band" role="status">
+            <div class="band__inner">
+              <div class="band__dot" />
+              <p class="band__text">
+                <span class="band__lead">
+                  The portal will be unavailable August 29 and 30 while we
+                  migrate.
+                </span>{" "}
+                The new portal opens Monday, August 31.
+              </p>
+            </div>
+          </div>
+        )
+      }
+
+      <header class="header">
+        <img
+          class="header__logo"
+          src="/recostseg-logo.svg"
+          alt="R.E. Cost Seg"
+          width="162"
+          height="31"
+        />
+      </header>
+
+      <main class="main">
+        <h1 class="title">Signing in to R.E. Cost Seg</h1>
+
+        {/* ════ SWAPPABLE 2 of 3 — INTRO PARAGRAPH. ════ */}
+        {
+          isPhaseA && (
+            <p class="lede">
+              On August 31, our client portal moves to app.recostseg.com. Your
+              studies, documents, and reports are all coming with it. Signing in
+              will work differently. Here's how.
+            </p>
+          )
+        }
+        {
+          isPhaseB && (
+            <p class="lede">
+              Our client portal is at{" "}
+              <a href="https://app.recostseg.com">app.recostseg.com</a>. Your
+              studies, documents, and reports are all there. Signing in works
+              differently than it used to. Here's how.
+            </p>
+          )
+        }
+
+        <section class="section">
+          <h2 class="section__title">How to sign in</h2>
+
+          <ol class="steps">
+            <li class="steps__item">
+              <span class="steps__num" aria-hidden="true">1</span>
+              <span class="steps__text">Go to app.recostseg.com</span>
+            </li>
+            <li class="steps__item">
+              <span class="steps__num" aria-hidden="true">2</span>
+              <span class="steps__text">Enter your email address</span>
+            </li>
+            <li class="steps__item">
+              <span class="steps__num" aria-hidden="true">3</span>
+              <span class="steps__text">
+                Check your email for a 6-digit code, and enter it
+              </span>
+            </li>
+          </ol>
+
+          <p class="note note--top-24">
+            There's no password. Codes come from notifications@recostseg.com and
+            are valid for one hour.
+          </p>
+
+          {/* ════ PHASE-DEPENDENT BUTTON ════ */}
+          <div class="cta">
+            {
+              isPhaseA && (
+                <span class="btn btn--disabled" aria-disabled="true">
+                  Opens August 31
+                </span>
+              )
+            }
+            {
+              isPhaseB && (
+                <a class="btn btn--primary" href="https://app.recostseg.com">
+                  Go to the portal
+                </a>
+              )
+            }
+          </div>
+        </section>
+
+        <section class="section panel">
+          <h2 class="section__title">The code didn't arrive</h2>
+          <ul class="bullets">
+            <li class="bullets__item">
+              <span class="bullets__dot" aria-hidden="true"></span>
+              <span>Check your spam or junk folder</span>
+            </li>
+            <li class="bullets__item">
+              <span class="bullets__dot" aria-hidden="true"></span>
+              <span>In Gmail, check the Promotions and Updates tabs</span>
+            </li>
+            <li class="bullets__item">
+              <span class="bullets__dot" aria-hidden="true"></span>
+              <span>
+                Search your inbox for{" "}
+                <span class="nowrap-medium">notifications@recostseg.com</span>
+              </span>
+            </li>
+            <li class="bullets__item">
+              <span class="bullets__dot" aria-hidden="true"></span>
+              <span>Wait a minute, then request a new code</span>
+            </li>
+          </ul>
+          <p class="note note--top-20 pretty">
+            Corporate email filters sometimes hold the message for a few
+            minutes. The code stays valid for a full hour, so there's no rush to
+            request another one.
+          </p>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">
+            I no longer have access to that email address
+          </h2>
+          <p class="body pretty body--top-16">
+            Email support@recostseg.com from your current address and include
+            the property address from your study. We'll verify your identity and
+            update your account.
+          </p>
+
+          <div class="contact">
+            <div class="contact__row">
+              <span class="contact__label">Email</span>
+              <a class="contact__value contact__value--break" href="mailto:support@recostseg.com">
+                support@recostseg.com
+              </a>
+            </div>
+            <div class="contact__row">
+              <span class="contact__label">Phone, if it's urgent</span>
+              <a class="contact__value" href="tel:+13462146539">
+                (346) 214-6539
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Common questions</h2>
+          <div class="faq">
+            <div class="faq__item">
+              <h3 class="faq__q">Do I need a new account?</h3>
+              <p class="faq__a">
+                No. Use the same email address you've always used with us.
+              </p>
+            </div>
+
+            <div class="faq__item">
+              <h3 class="faq__q">Why isn't there a password?</h3>
+              <p class="faq__a">
+                A one-time code sent to your email is harder to compromise than
+                a password, and there's nothing to remember or reset.
+              </p>
+            </div>
+
+            {/* ════ SWAPPABLE 3 of 3 — LAST TWO FAQ ITEMS. ════ */}
+            {
+              isPhaseA && (
+                <div class="faq">
+                  <div class="faq__item">
+                    <h3 class="faq__q">What happens to my past studies?</h3>
+                    <p class="faq__a">
+                      Every study, document, and report moves with you. Nothing
+                      will be lost.
+                    </p>
+                  </div>
+                  <div class="faq__item">
+                    <h3 class="faq__q">What about my current bookmark?</h3>
+                    <p class="faq__a">
+                      It will stop working after August 28. Update it to
+                      app.recostseg.com.
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+            {
+              isPhaseB && (
+                <div class="faq">
+                  <div class="faq__item">
+                    <h3 class="faq__q">Are my past studies still there?</h3>
+                    <p class="faq__a">
+                      Yes. Every study, document, and report moved over. Nothing
+                      was lost.
+                    </p>
+                  </div>
+                  <div class="faq__item">
+                    <h3 class="faq__q">My bookmark goes to the old address.</h3>
+                    <p class="faq__a">
+                      It now sends you straight to the new portal, so nothing
+                      breaks. Still worth updating it to{" "}
+                      <a href="https://app.recostseg.com">app.recostseg.com</a>.
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </section>
+
+        <footer class="footer">
+          <p class="body">
+            Still experiencing issues? Email{" "}
+            <a href="mailto:support@recostseg.com">support@recostseg.com</a> or
+            call <a href="tel:+13462146539">(346) 214-6539</a>.
+          </p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
